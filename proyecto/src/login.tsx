@@ -6,7 +6,12 @@ const Login: React.FC = () => {
     email: '',
     password: '',
   });
-  const [errors, setErrors] = useState({});
+  interface Errors {
+    email?: string;
+    password?: string;
+  }
+
+  const [errors, setErrors] = useState<Errors>({});
   const handleInput = (event: any) => {
     setValues(prev => ({...prev, [event.target.name]: event.target.value}));
   }
@@ -41,6 +46,7 @@ const Login: React.FC = () => {
                   placeholder="Enter your email"
                   onChange={handleInput}
                 />
+                {errors.email && <span className='text-danger'>{errors.email}</span>}
               </div>
             </div>
             <div>
@@ -57,6 +63,7 @@ const Login: React.FC = () => {
                   className="appearance-none rounded-md relative block w-full px-3 py-2 border border-[#55ff55] placeholder-[#aaaaaa] text-[#000000] focus:outline-none focus:ring-[#ff9955] focus:border-[#ff9955] focus:z-10 sm:text-sm"
                   placeholder="Enter your password"
                 />
+                {errors.password && <span className='text-danger'>{errors.password}</span>}
               </div>
             </div>
             <div>
