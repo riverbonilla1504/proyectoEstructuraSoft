@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const cors = require('cors');
 
 const app = express();
@@ -10,14 +10,15 @@ app.use(express.json());
 app.use(cors());
 
 
-// MySQL connection setup
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'signup'
-});
 
+// Configuración de conexión a la base de datos
+const db = mysql.createConnection({
+  host: 'autorack.proxy.rlwy.net',
+  user: 'root',
+  password: 'TGoKybDCVolYCvdfQlarMlsqIrdnpWqd',
+  database: 'railway',
+  port: 53793
+});
 // Test database connection
 db.connect((err) => {
   if (err) {
