@@ -44,7 +44,7 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     })
       .then(res => {
         console.log('Datos enviados:', res.data);
-        navigate('/'); // Redirige al inicio u otra página después del registro exitoso
+        navigate('/login'); // Redirige al inicio u otra página después del registro exitoso
       })
       .catch(err => {
         console.log('Error al enviar datos:', err);
