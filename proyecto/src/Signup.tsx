@@ -26,33 +26,36 @@ const Signup: React.FC = () => {
   };
 
   // Manejo del submit
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  // Validar los datos ingresados
-  const validationErrors = Validation(values);
-  setErrors(validationErrors);
+    // Validar los datos ingresados
+    const validationErrors = Validation(values);
+    setErrors(validationErrors);
 
-  // Verificar si no hay errores antes de enviar los datos
-  if (Object.keys(validationErrors).length === 0) {
-    console.log('Datos enviados:', values);
+    // Verificar si no hay errores antes de enviar los datos
+    if (Object.keys(validationErrors).length === 0) {
+      console.log('Datos enviados:', values);
 
-    axios.post('http://localhost:3001/signup', values, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => {
-        console.log('Datos enviados:', res.data);
-        navigate('/login'); // Redirige al inicio u otra página después del registro exitoso
+      // Utiliza la variable de entorno para la URL de la API
+      const apiUrl = process.env.REACT_APP_API_URL; 
+
+      axios.post(`${apiUrl}/signup`, values, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
-      .catch(err => {
-        console.log('Error al enviar datos:', err);
-      });
-  } else {
-    console.log('Errores de validación presentes:', validationErrors);
-  }
-};
+        .then(res => {
+          console.log('Datos enviados:', res.data);
+          navigate('/login'); // Redirige al inicio u otra página después del registro exitoso
+        })
+        .catch(err => {
+          console.log('Error al enviar datos:', err);
+        });
+    } else {
+      console.log('Errores de validación presentes:', validationErrors);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
