@@ -94,7 +94,7 @@ app.post('/signup', (req, res) => {
     }
   );
 });
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, '../proyecto/build')));
 
 // Handles any requests that don't match the API routes
 app.get('*', (req, res) => {
