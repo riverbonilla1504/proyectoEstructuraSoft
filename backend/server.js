@@ -27,7 +27,31 @@ db.connect((err) => {
     console.log('Connected to MySQL database');
   }
 });
+// Login route
+app.post('/login', (req, res) => {
+  const { email, password } = req.body;
 
+  // Check if all required fields are present
+  if (!email || !password) {
+    return res.status(400).send('All fields are required');
+  }
+
+  // Corrected select statement
+  db.query(
+    "SELECT * FROM login WHERE email = ? AND password = ?",
+    [email, password],
+    (err, result) => {
+      if (err) {
+        console.error('Error selecting values:', err);
+        return res.status(500).send('An error occurred while selecting values');
+      } else if (result.length === 0) {
+        res.status(401).send('Invalid email or password');
+      } else {
+        res.send('Login successful');
+      }
+    }
+  );
+});
 // Signup route
 app.post('/signup', (req, res) => {
   const { name, email, password } = req.body;

@@ -23,7 +23,7 @@ const Signup: React.FC = () => {
   // Manejo de cambios en los inputs
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues(prev => ({ ...prev, [event.target.name]: event.target.value }));
-  };
+  }; // <-- Add this closing brace to fix the issue
 
   // Manejo del submit
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -39,23 +39,36 @@ const Signup: React.FC = () => {
 
       // Utiliza la variable de entorno para la URL de la API
       const apiUrl = process.env.REACT_APP_API_URL; 
-
-      axios.post(`${apiUrl}signup`, values, {
+      //verify if the values are the same in the db
+      axios.post(`${apiUrl}check-user`, { email: values.email }, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
         .then(res => {
-          console.log('Datos enviados:', res.data);
-          navigate('/login'); // Redirige al inicio u otra página después del registro exitoso
+          if (res.data.exists) {
+            setErrors(prev => ({ ...prev, email: 'El email ya está registrado' }));
+          } else {
+            axios.post(`${apiUrl}signup`, values, {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+              .then(res => {
+                console.log('Datos enviados:', res.data);
+                navigate('/login'); // Redirige al inicio u otra página después del registro exitoso
+              })
+              .catch(err => {
+                console.log('Error al enviar datos:', err);
+              });
+          }
         })
         .catch(err => {
-          console.log('Error al enviar datos:', err);
+          console.log('Error al verificar el email:', err);
         });
-    } else {
-      console.log('Errores de validación presentes:', validationErrors);
-    }
-  };
+
+  }
+}; // <-- Add this closing brace to fix the issue
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
