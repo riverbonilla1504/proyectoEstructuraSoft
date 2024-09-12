@@ -24,9 +24,9 @@ except Error as e:
 
 
 # Check if user exists
-@app.route('/check-user', methods=['POST'])
+@app.route('/check-user', methods=['GET'])
 def check_user():
-    email = request.json.get('email')
+    email = request.args.get('email')
 
     if not email:
         return 'Email is required', 400
