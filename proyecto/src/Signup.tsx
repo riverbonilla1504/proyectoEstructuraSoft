@@ -40,7 +40,7 @@ const Signup: React.FC = () => {
       // Utiliza la variable de entorno para la URL de la API
       const apiUrl = process.env.REACT_APP_API_URL; 
 
-      axios.post(`${apiUrl}/signup`, values, {
+      axios.post(`${apiUrl}signup`, values, {
         headers: {
           'Content-Type': 'application/json'
         }
