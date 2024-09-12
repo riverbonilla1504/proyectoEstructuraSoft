@@ -16,6 +16,7 @@ const Signup: React.FC = () => {
     email?: string;
     password?: string;
     name?: string;
+    general?: string;
   }
 
   const [errors, setErrors] = useState<Errors>({});
@@ -23,7 +24,7 @@ const Signup: React.FC = () => {
   // Manejo de cambios en los inputs
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues(prev => ({ ...prev, [event.target.name]: event.target.value }));
-  }; // <-- Add this closing brace to fix the issue
+  };
 
   // Manejo del submit
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -38,18 +39,21 @@ const Signup: React.FC = () => {
       console.log('Datos enviados:', values);
 
       // Utiliza la variable de entorno para la URL de la API
-      const apiUrl = process.env.REACT_APP_API_URL; 
-      //verify if the values are the same in the db
-      axios.post(`${apiUrl}check-user`, { email: values.email }, {
+      const apiUrl = process.env.REACT_APP_API_URL;
+
+      // Verificar si el usuario ya existe en la base de datos
+      axios.post(`${apiUrl}/check-user`, { email: values.email }, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
         .then(res => {
           if (res.data.exists) {
+            // Si el usuario ya existe, mostrar un error
             setErrors(prev => ({ ...prev, email: 'El email ya está registrado' }));
           } else {
-            axios.post(`${apiUrl}signup`, values, {
+            // Si no existe, proceder con el registro
+            axios.post(`${apiUrl}/signup`, values, {
               headers: {
                 'Content-Type': 'application/json'
               }
@@ -60,15 +64,18 @@ const Signup: React.FC = () => {
               })
               .catch(err => {
                 console.log('Error al enviar datos:', err);
+                setErrors(prev => ({ ...prev, general: 'Error al registrar. Inténtalo de nuevo.' }));
               });
           }
         })
         .catch(err => {
           console.log('Error al verificar el email:', err);
+          setErrors(prev => ({ ...prev, general: 'Error al verificar el email. Inténtalo de nuevo.' }));
         });
-
-  }
-}; // <-- Add this closing brace to fix the issue
+    } else {
+      console.log('Errores de validación presentes:', validationErrors);
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
@@ -126,6 +133,7 @@ const Signup: React.FC = () => {
               />
               {errors.password && <span className='text-danger'>{errors.password}</span>}
             </div>
+            {errors.general && <span className='text-danger'>{errors.general}</span>}
             <button
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-[#ffffff] bg-[#55ff55] hover:bg-[#44dd44] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff9955]"
