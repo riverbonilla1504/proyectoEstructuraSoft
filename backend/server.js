@@ -11,11 +11,11 @@ app.use(cors());
 
 // Configuración de conexión a la base de datos
 const db = mysql.createConnection({
-  host: 'autorack.proxy.rlwy.net',
-  user: 'root',
-  password: 'TGoKybDCVolYCvdfQlarMlsqIrdnpWqd',
-  database: 'railway',
-  port: 53793
+  host: 'miproyectodb.c9mqeqm82gme.us-east-2.rds.amazonaws.com',
+  user: 'admin',
+  password: 'river123',
+  database: 'signup',
+  port: 3306
 });
 
 // Test database connection
