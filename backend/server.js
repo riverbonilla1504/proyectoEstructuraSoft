@@ -9,8 +9,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 
-
-
 // Configuración de conexión a la base de datos
 const db = mysql.createConnection({
   host: 'autorack.proxy.rlwy.net',
@@ -19,6 +17,7 @@ const db = mysql.createConnection({
   database: 'railway',
   port: 53793
 });
+
 // Test database connection
 db.connect((err) => {
   if (err) {
@@ -27,16 +26,37 @@ db.connect((err) => {
     console.log('Connected to MySQL database');
   }
 });
+
+// Check if user exists
+app.post('/check-user', (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).send('Email is required');
+  }
+
+  db.query(
+    "SELECT * FROM login WHERE email = ?",
+    [email],
+    (err, result) => {
+      if (err) {
+        console.error('Error querying the database:', err);
+        return res.status(500).send('An error occurred while checking the user');
+      } else {
+        res.send({ exists: result.length > 0 });
+      }
+    }
+  );
+});
+
 // Login route
 app.post('/login', (req, res) => {
   const { email, password } = req.body;
 
-  // Check if all required fields are present
   if (!email || !password) {
     return res.status(400).send('All fields are required');
   }
 
-  // Corrected select statement
   db.query(
     "SELECT * FROM login WHERE email = ? AND password = ?",
     [email, password],
@@ -52,16 +72,15 @@ app.post('/login', (req, res) => {
     }
   );
 });
+
 // Signup route
 app.post('/signup', (req, res) => {
   const { name, email, password } = req.body;
 
-  // Check if all required fields are present
   if (!name || !email || !password) {
     return res.status(400).send('All fields are required');
   }
 
-  // Corrected insert statement
   db.query(
     "INSERT INTO login (name, email, password) VALUES (?, ?, ?)",
     [name, email, password],
