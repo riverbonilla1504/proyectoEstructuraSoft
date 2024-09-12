@@ -94,12 +94,6 @@ app.post('/signup', (req, res) => {
     }
   );
 });
-app.use(express.static(path.join(__dirname, '../proyecto/build')));
-
-// Handles any requests that don't match the API routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'proyecto/build', 'index.html'));
-});
 // Start server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
