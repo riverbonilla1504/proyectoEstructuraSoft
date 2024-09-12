@@ -42,7 +42,7 @@ const Signup: React.FC = () => {
       const apiUrl = process.env.REACT_APP_API_URL;
 
       // Verificar si el usuario ya existe en la base de datos
-      axios.post(`${apiUrl}check-user`, { email: values.email }, {
+      axios.post(`${apiUrl}login`, { email: values.email }, {
         headers: {
           'Content-Type': 'application/json'
         }
