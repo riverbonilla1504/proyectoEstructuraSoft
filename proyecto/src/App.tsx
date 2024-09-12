@@ -8,7 +8,7 @@ import Signup from './Signup';
 import Home from './home';
 function App() {
   return (
-    <BrowserRouter basename='proyecto'>
+    <BrowserRouter>
       <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/signup" element={<Signup />} />
