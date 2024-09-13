@@ -1,29 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Clase de Cola
+class Queue<T> {
+  private items: T[] = [];
+
+  enqueue(item: T) {
+    this.items.push(item);
+  }
+
+  dequeue(): T | undefined {
+    return this.items.shift();
+  }
+
+  peek(): T | undefined {
+    return this.items[0];
+  }
+
+  isEmpty(): boolean {
+    return this.items.length === 0;
+  }
+
+  getAll(): T[] {
+    return [...this.items];
+  }
+}
+
 export default function Component() {
   interface User {
     name: string;
     email: string;
-    betaccess: boolean;
+    betaccess: boolean; // Corregido el nombre del campo
   }
 
-  const [users, setUsers] = useState<User[]>([]);
+  const [usersQueue, setUsersQueue] = useState<Queue<User>>(new Queue<User>());
   const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await axios.get(`${apiUrl}/users`);
+        const response = await axios.get<User[]>(`${apiUrl}/users`); // Agregado tipo explícito
         // Verifica los datos que recibes en la respuesta
         console.log('Usuarios recibidos:', response.data);
 
-        // Filtra los usuarios que no tienen betaaccess
-        const filteredUsers = response.data.filter((user: User) => !user.betaccess);
+        // Crea una nueva cola e inserta los usuarios que no tienen betaaccess
+        const queue = new Queue<User>();
+        response.data.filter((user: User) => !user.betaccess).forEach(user => queue.enqueue(user));
 
-        console.log('Usuarios filtrados:', filteredUsers);
+        console.log('Usuarios en cola:', queue.getAll());
 
-        setUsers(filteredUsers);
+        setUsersQueue(queue);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -34,8 +60,17 @@ export default function Component() {
   const handleAccept = async (email: string) => {
     try {
       await axios.post(`${apiUrl}/accept-user`, { email });
-      // Actualiza la lista de usuarios después de aceptar y elimina al usuario de la lista
-      setUsers(users.filter(user => user.email !== email));
+
+      // Crea una nueva cola y transfiere los elementos que no sean el usuario aceptado
+      const newQueue = new Queue<User>();
+      while (!usersQueue.isEmpty()) {
+        const user = usersQueue.dequeue();
+        if (user && user.email !== email) {
+          newQueue.enqueue(user);
+        }
+      }
+
+      setUsersQueue(newQueue);
     } catch (error) {
       console.error('Error updating user:', error);
     }
@@ -84,7 +119,7 @@ export default function Component() {
                 </tr>
               </thead>
               <tbody>
-                {users.map(user => (
+                {usersQueue.getAll().map(user => (
                   <tr key={user.email} className="border-b border-[#aaaaaa] text-[#aaaaaa]">
                     <td className="px-4 py-3">{user.name}</td>
                     <td className="px-4 py-3">{user.email}</td>
