@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
 export default function Component() {
   interface User {
     name: string;
@@ -11,24 +10,25 @@ export default function Component() {
 
   const [users, setUsers] = useState<User[]>([]);
   const apiUrl = process.env.REACT_APP_API_URL;
+
   useEffect(() => {
     async function fetchUsers() {
       try {
-
-        const response = await axios.get(`${apiUrl}/users`); // Cambia la URL si es necesario
-        setUsers(response.data);
+        const response = await axios.get(`${apiUrl}/users`);
+        // Filtra los usuarios que no tienen betaaccess
+        setUsers(response.data.filter((user: User) => !user.betaaccess));
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     }
     fetchUsers();
-  }, []);
+  }, [apiUrl]);
 
   const handleAccept = async (email: string) => {
     try {
       await axios.post(`${apiUrl}/accept-user`, { email });
-      // Actualiza la lista de usuarios después de aceptar
-      setUsers(users.map(user => user.email === email ? { ...user, betaccess: true } : user));
+      // Actualiza la lista de usuarios después de aceptar y elimina al usuario de la lista
+      setUsers(users.filter(user => user.email !== email));
     } catch (error) {
       console.error('Error updating user:', error);
     }
