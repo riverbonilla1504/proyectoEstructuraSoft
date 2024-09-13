@@ -15,7 +15,7 @@ export default function Component() {
     async function fetchUsers() {
       try {
 
-        const response = await axios.get(`${apiUrl}/check-user`); // Cambia la URL si es necesario
+        const response = await axios.get(`${apiUrl}/users`); // Cambia la URL si es necesario
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -26,7 +26,7 @@ export default function Component() {
 
   const handleAccept = async (email: string) => {
     try {
-      await axios.post(`${apiUrl}/check-user`, { email });
+      await axios.post(`${apiUrl}/accept-user`, { email });
       // Actualiza la lista de usuarios después de aceptar
       setUsers(users.map(user => user.email === email ? { ...user, betaccess: true } : user));
     } catch (error) {
