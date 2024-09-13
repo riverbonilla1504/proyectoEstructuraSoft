@@ -56,8 +56,8 @@ const Component: React.FC<ComponentProps> = () => {
         <div className="container mx-auto flex items-center justify-between">
           <p className="text-[#aaaaaa]">&copy; 2024 Pixel Roguelike. All rights reserved.</p>
           <nav className="hidden md:flex space-x-4">
-            <button onClick={() => navigate('/privacy')} className="text-[#aaaaaa] hover:text-[#55ff55]">
-              Privacy
+            <button onClick={() => navigate('/adminDashboard')} className="text-[#aaaaaa] hover:text-[#55ff55]">
+              dev tools
             </button>
             <button onClick={() => navigate('/terms')} className="text-[#aaaaaa] hover:text-[#55ff55]">
               Terms
