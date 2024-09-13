@@ -5,7 +5,7 @@ export default function Component() {
   interface User {
     name: string;
     email: string;
-    betaaccess: boolean;
+    betaccess: boolean;
   }
 
   const [users, setUsers] = useState<User[]>([]);
@@ -15,8 +15,15 @@ export default function Component() {
     async function fetchUsers() {
       try {
         const response = await axios.get(`${apiUrl}/users`);
+        // Verifica los datos que recibes en la respuesta
+        console.log('Usuarios recibidos:', response.data);
+
         // Filtra los usuarios que no tienen betaaccess
-        setUsers(response.data.filter((user: User) => !user.betaaccess));
+        const filteredUsers = response.data.filter((user: User) => !user.betaccess);
+
+        console.log('Usuarios filtrados:', filteredUsers);
+
+        setUsers(filteredUsers);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -82,7 +89,7 @@ export default function Component() {
                     <td className="px-4 py-3">{user.name}</td>
                     <td className="px-4 py-3">{user.email}</td>
                     <td className="px-4 py-3">
-                      {!user.betaaccess ? (
+                      {!user.betaccess ? (
                         <button className="px-4 py-2 rounded-md hover:bg-[#55ff55] hover:text-[#1f1f1f]" onClick={() => handleAccept(user.email)}>
                           Accept
                         </button>
