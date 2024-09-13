@@ -39,13 +39,16 @@ export default function Component() {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await axios.get<User[]>(`${apiUrl}/users`); // Agregado tipo explícito
-        // Verifica los datos que recibes en la respuesta
+        const response = await axios.get<User[]>(`${apiUrl}/users`);
         console.log('Usuarios recibidos:', response.data);
 
-        // Crea una nueva cola e inserta los usuarios que no tienen betaaccess
+        // Crea una nueva cola e inserta los usuarios que no tienen betaccess
         const queue = new Queue<User>();
-        response.data.filter((user: User) => !user.betaccess).forEach(user => queue.enqueue(user));
+        response.data.forEach(user => {
+          if (!user.betaccess) {  // Asegura el uso correcto de `betaccess`
+            queue.enqueue(user);
+          }
+        });
 
         console.log('Usuarios en cola:', queue.getAll());
 
@@ -118,19 +121,15 @@ export default function Component() {
                   <th className="px-4 py-3 text-left">Action</th>
                 </tr>
               </thead>
-              <tbody>
+<tbody>
                 {usersQueue.getAll().map(user => (
                   <tr key={user.email} className="border-b border-[#aaaaaa] text-[#aaaaaa]">
                     <td className="px-4 py-3">{user.name}</td>
                     <td className="px-4 py-3">{user.email}</td>
                     <td className="px-4 py-3">
-                      {!user.betaccess ? (
-                        <button className="px-4 py-2 rounded-md hover:bg-[#55ff55] hover:text-[#1f1f1f]" onClick={() => handleAccept(user.email)}>
-                          Accept
-                        </button>
-                      ) : (
-                        <span>Accepted</span>
-                      )}
+                      <button className="px-4 py-2 rounded-md hover:bg-[#55ff55] hover:text-[#1f1f1f]" onClick={() => handleAccept(user.email)}>
+                        Accept
+                      </button>
                     </td>
                   </tr>
                 ))}
