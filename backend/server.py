@@ -26,10 +26,10 @@ except Error as e:
 # Check if user exists
 @app.route('/check-user', methods=['POST'])
 def check_user():
-    email = request.args.get('email')
+    email = request.json.get('email')  # Cambiar a request.json.get para POST
 
     if not email:
-        return 'Email is required', 400
+        return jsonify({'error': 'Email is required'}), 400
 
     try:
         cursor = connection.cursor(dictionary=True)
@@ -39,7 +39,7 @@ def check_user():
         return jsonify({'exists': len(result) > 0})
     except Error as e:
         print('Error querying the database:', e)
-        return 'An error occurred while checking the user', 500
+        return jsonify({'error': 'An error occurred while checking the user'}), 500
 
 
 # Login route
