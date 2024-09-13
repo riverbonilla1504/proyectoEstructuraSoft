@@ -86,6 +86,34 @@ def signup():
         print('Error inserting values:', e)
         return 'An error occurred while inserting values', 500
 
+@app.route('/users', methods=['GET'])
+def get_users():
+    try:
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM login")
+        result = cursor.fetchall()
+        cursor.close()
+        return jsonify(result)
+    except Error as e:
+        print('Error querying the database:', e)
+        return 'An error occurred while retrieving users', 500
+
+@app.route('/accept-user', methods=['POST'])
+def accept_user():
+    email = request.json.get('email')
+
+    if not email:
+        return 'Email is required', 400
+
+    try:
+        cursor = connection.cursor()
+        cursor.execute("UPDATE login SET betaccess = TRUE WHERE email = %s", (email,))
+        connection.commit()
+        cursor.close()
+        return 'User updated successfully'
+    except Error as e:
+        print('Error updating user:', e)
+        return 'An error occurred while updating user', 500
 
 # Start server
 if __name__ == '__main__':
