@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Validation from './LoginValidation';
 import axios from 'axios';
 
-const Login: React.FC = () => {
+const AdminLogin: React.FC = () => {
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -15,55 +14,41 @@ const Login: React.FC = () => {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
 
-  const validationErrors = Validation(values);
-  setErrors(validationErrors);
-
-  if (Object.keys(validationErrors).length === 0) {
-    const apiUrl = process.env.REACT_APP_API_URL; // URL de la API desde variables de entorno
-
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const apiUrl = process.env.REACT_APP_API_URL;
     // Enviar los datos de login al backend
-    axios.post(`${apiUrl}/login`, values, {
+    axios.post(`${apiUrl}/login-admin`, values, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((response) => {
-        const { betaccess } = response.data; // Obtener el valor de betaccess
-
-        if (betaccess === 0) {
-          navigate('/userWaitDashboard'); // Redirigir a userWaitDashboard
-          console.log('No tienes acceso a la beta, serás redirigido a la lista de espera');
-        } else if (betaccess === 1) {
-          navigate('/userDashboard'); // Redirigir a userDashboard
-          console.log('Tienes acceso a la beta, serás redirigido a tu dashboard');
-        }
+        // Suponiendo que la respuesta es exitosa
+        console.log('Inicio de sesión exitoso');
+        navigate('/adminDashboard'); // Redirigir a adminDashboard
       })
       .catch((err) => {
         console.log('Error al iniciar sesión:', err);
         setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
       });
-  } else {
-    console.log('Error en la validación');
-  }
-};
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-[#55ff55]"onClick={() => navigate('/')}>Pixel Roguelike</h1>
+          <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1>
           <p className="mt-2 text-sm text-[#aaaaaa]">
-            Welcome to the beta of our 16-bit style SNES roguelike game.
+            Welcome to the admin login for developers. This login is secret and should be used only by developers.
           </p>
         </div>
         <div className="bg-[#1a1b1c] p-8 rounded-lg shadow-md">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-[#55ff55]">
-                Email
+                Email (Dev Only)
               </label>
               <input
                 id="email"
@@ -79,7 +64,7 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-[#55ff55]">
-                Password
+                Password (Dev Only)
               </label>
               <input
                 id="password"
@@ -107,9 +92,8 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
           </form>
         </div>
         <div className="text-center text-sm text-[#aaaaaa]">
-          Don't have an account?{' '}
-          <Link to="/signup" className="font-medium text-[#55ff55] hover:text-[#ff9955]">
-            Sign up
+          <Link to="/" className="font-medium text-[#55ff55] hover:text-[#ff9955]">
+            Back to Home
           </Link>
         </div>
       </div>
@@ -117,4 +101,4 @@ const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
   );
 };
 
-export default Login;
+export default AdminLogin;

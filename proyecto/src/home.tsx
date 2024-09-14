@@ -62,24 +62,9 @@ const Home: React.FC = () => {
           <p className="text-[#aaaaaa]">&copy; 2024 Pixel Roguelike. All rights reserved.</p>
           <nav className="flex space-x-4">
             <button 
-              onClick={() => navigate('/adminDashBoard')} 
+              onClick={() => navigate('/loginadmin')} 
               className="text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
               DevTools
-            </button>
-            <button 
-              onClick={() => navigate('/privacy')} 
-              className="text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
-              Privacy
-            </button>
-            <button 
-              onClick={() => navigate('/terms')} 
-              className="text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
-              Terms
-            </button>
-            <button 
-              onClick={() => navigate('/support')} 
-              className="text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
-              Support
             </button>
           </nav>
           <div className="mt-4 sm:mt-0">

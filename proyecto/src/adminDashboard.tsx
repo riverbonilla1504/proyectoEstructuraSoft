@@ -82,7 +82,6 @@ export default function AdminDashboard() {
           <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1>
           <nav className="hidden md:flex space-x-4">
             <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">About</a>
-            <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">Features</a>
             <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">Contact</a>
             <div className="relative">
               <button onClick={() => setMenuOpen(!menuOpen)} className="text-[#aaaaaa] hover:text-[#55ff55] flex items-center">
@@ -91,9 +90,7 @@ export default function AdminDashboard() {
               </button>
               {menuOpen && (
                 <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-600 text-white font-bold divide-y divide-gray-100">
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-500">Profile</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-500">Settings</a>
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-500">Sign out</a>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-500" onClick={() => navigate('/')}>Sign out</a>
                 </div>
               )}
             </div>

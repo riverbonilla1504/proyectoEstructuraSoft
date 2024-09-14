@@ -81,7 +81,7 @@ const Signup: React.FC = () => {
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-[#55ff55]">Sign Up</h1>
+          <h1 className="text-4xl font-bold text-[#55ff55]"onClick={() => navigate('/')}>Pixel Roguelike</h1>
           <p className="mt-2 text-sm text-[#aaaaaa]">
             Regístrate en tu cuenta
           </p>
@@ -144,7 +144,7 @@ const Signup: React.FC = () => {
         </div>
         <div className="text-center text-sm text-[#aaaaaa]">
           ¿Ya tienes una cuenta?{' '}
-          <Link to="/" className="font-medium text-[#55ff55] hover:text-[#ff9955]">
+          <Link to="/login" className="font-medium text-[#55ff55] hover:text-[#ff9955]">
             Inicia sesión
           </Link>
         </div>
