@@ -12,49 +12,52 @@ const Login: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const navigate = useNavigate();
 
+  // Handle input changes
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
 
-  const validationErrors = Validation(values);
-  setErrors(validationErrors);
+  // Handle form submission
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  if (Object.keys(validationErrors).length === 0) {
-    const apiUrl = process.env.REACT_APP_API_URL; // URL de la API desde variables de entorno
+    const validationErrors = Validation(values);
+    setErrors(validationErrors);
 
-    // Enviar los datos de login al backend
-    axios.post(`${apiUrl}/login`, values, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((response) => {
-        const { betaccess } = response.data; // Obtener el valor de betaccess
+    if (Object.keys(validationErrors).length === 0) {
+      const apiUrl = process.env.REACT_APP_API_URL; // API URL from environment variables
 
-        if (betaccess === 0) {
-          navigate('/userWaitDashboard'); // Redirigir a userWaitDashboard
-          console.log('No tienes acceso a la beta, serás redirigido a la lista de espera');
-        } else if (betaccess === 1) {
-          navigate('/userDashboard'); // Redirigir a userDashboard
-          console.log('Tienes acceso a la beta, serás redirigido a tu dashboard');
-        }
+      // Send login data to the backend
+      axios.post(`${apiUrl}/login`, values, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .catch((err) => {
-        console.log('Error al iniciar sesión:', err);
-        setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
-      });
-  } else {
-    console.log('Error en la validación');
-  }
-};
+        .then((response) => {
+          const { betaccess } = response.data; // Get the value of betaccess
+
+          if (betaccess === 0) {
+            navigate('/userWaitDashboard'); // Redirect to userWaitDashboard
+            console.log('You do not have access to the beta, you will be redirected to the waiting list');
+          } else if (betaccess === 1) {
+            navigate('/userDashboard'); // Redirect to userDashboard
+            console.log('You have access to the beta, you will be redirected to your dashboard');
+          }
+        })
+        .catch((err) => {
+          console.log('Error logging in:', err);
+          setErrors((prev) => ({ ...prev, general: 'Error logging in. Please try again.' }));
+        });
+    } else {
+      console.log('Validation error');
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-[#55ff55]"onClick={() => navigate('/')}>Pixel Roguelike</h1>
+          <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1>
           <p className="mt-2 text-sm text-[#aaaaaa]">
             Welcome to the beta of our 16-bit style SNES roguelike game.
           </p>

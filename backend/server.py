@@ -3,11 +3,12 @@ import mysql.connector
 from mysql.connector import Error
 from flask_cors import CORS
 
+# Initialize Flask app
 app = Flask(__name__)
-CORS(app)
-PORT = 3000
+CORS(app)  # Enable Cross-Origin Resource Sharing
+PORT = 3000  # Define the port on which the server will run
 
-# Configuración de conexión a la base de datos
+# Database connection configuration
 try:
     connection = mysql.connector.connect(
         host='miproyectodb.c9mqeqm82gme.us-east-2.rds.amazonaws.com',
@@ -22,11 +23,10 @@ try:
 except Error as e:
     print('Error connecting to MySQL:', e)
 
-
-# Check if user exists
+# Route to check if a user exists
 @app.route('/check-user', methods=['POST'])
 def check_user():
-    email = request.json.get('email')  # Cambiar a request.json.get para POST
+    email = request.json.get('email')  # Get email from request JSON
 
     if not email:
         return jsonify({'error': 'Email is required'}), 400
@@ -41,8 +41,7 @@ def check_user():
         print('Error querying the database:', e)
         return jsonify({'error': 'An error occurred while checking the user'}), 500
 
-
-# Login route
+# Route for user login
 @app.route('/login', methods=['POST'])
 def login():
     email = request.json.get('email')
@@ -60,13 +59,13 @@ def login():
         if result is None:
             return {'error': 'Invalid email or password'}, 401
         else:
-            # Devolver los datos del usuario y el valor de `betaccess`
+            # Return user data and betaccess value
             return {'message': 'Login successful', 'betaccess': result['betaccess']}, 200
     except Error as e:
         print('Error selecting values:', e)
         return {'error': 'An error occurred while selecting values'}, 500
 
-#login admin
+# Route for admin login
 @app.route('/login-admin', methods=['POST'])
 def login_admin():
     email = request.json.get('email')
@@ -89,7 +88,7 @@ def login_admin():
         print('Error selecting values:', e)
         return 'An error occurred while selecting values', 500
 
-# Signup route
+# Route for user signup
 @app.route('/signup', methods=['POST'])
 def signup():
     name = request.json.get('name')
@@ -109,6 +108,7 @@ def signup():
         print('Error inserting values:', e)
         return 'An error occurred while inserting values', 500
 
+# Route to get all users
 @app.route('/users', methods=['GET'])
 def get_users():
     try:
@@ -121,6 +121,7 @@ def get_users():
         print('Error querying the database:', e)
         return 'An error occurred while retrieving users', 500
 
+# Route to accept a user
 @app.route('/accept-user', methods=['POST'])
 def accept_user():
     email = request.json.get('email')
@@ -138,6 +139,27 @@ def accept_user():
         print('Error updating user:', e)
         return 'An error occurred while updating user', 500
 
-# Start server
+# Route to get user profile
+@app.route('/user-profile', methods=['GET'])
+def user_profile():
+    email = request.args.get('email')
+
+    if not email:
+        return jsonify({'error': 'Email is required'}), 400
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT name, email, betaccess FROM login WHERE email = %s", (email,))
+        result = cursor.fetchone()
+        cursor.close()
+
+        if result is None:
+            return jsonify({'error': 'User not found'}), 404
+        return jsonify(result)
+    except Error as e:
+        print('Error retrieving user profile:', e)
+        return jsonify({'error': 'An error occurred while retrieving the user profile'}), 500
+
+# Start the server
 if __name__ == '__main__':
     app.run(port=PORT)

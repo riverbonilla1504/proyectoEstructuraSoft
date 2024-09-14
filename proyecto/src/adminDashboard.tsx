@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import fb_svg from './assets/fb.svg';
-import ig_svg from './assets/ig.svg';
-import tw_svg from './assets/tw.svg';
+import { useNavigate } from 'react-router-dom'; // Import hook for programmatic navigation
+import fb_svg from './assets/fb.svg'; // Import Facebook icon
+import ig_svg from './assets/ig.svg'; // Import Instagram icon
+import tw_svg from './assets/tw.svg'; // Import Twitter icon
 
+// Queue class for managing users
 class Queue<T> {
   private items: T[] = [];
 
@@ -37,10 +38,11 @@ export default function AdminDashboard() {
   }
 
   const [usersQueue, setUsersQueue] = useState<Queue<User>>(new Queue<User>());
-  const [menuOpen, setMenuOpen] = useState(false);  // Menú sesión desplegable
+  const [menuOpen, setMenuOpen] = useState(false); // Dropdown menu for session
   const apiUrl = process.env.REACT_APP_API_URL;
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize navigation hook
 
+  // Fetch users when component mounts or apiUrl changes
   useEffect(() => {
     async function fetchUsers() {
       try {
@@ -59,6 +61,7 @@ export default function AdminDashboard() {
     fetchUsers();
   }, [apiUrl]);
 
+  // Handle accepting a user and update queue
   const handleAccept = async (email: string) => {
     try {
       await axios.post(`${apiUrl}/accept-user`, { email });
@@ -79,7 +82,7 @@ export default function AdminDashboard() {
     <div className="flex flex-col min-h-screen bg-[#1f1f1f]">
       <header className="bg-[#0f1010] py-6 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto flex items-center justify-between">
-          <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1>
+          <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1> {/* Navigate to home page */}
           <nav className="hidden md:flex space-x-4">
             <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">About</a>
             <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">Contact</a>
@@ -90,7 +93,7 @@ export default function AdminDashboard() {
               </button>
               {menuOpen && (
                 <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-gray-600 text-white font-bold divide-y divide-gray-100">
-                  <a href="#" className="block px-4 py-2 hover:bg-gray-500" onClick={() => navigate('/')}>Sign out</a>
+                  <a href="#" className="block px-4 py-2 hover:bg-gray-500" onClick={() => navigate('/')}>Sign out</a> {/* Navigate to sign out */}
                 </div>
               )}
             </div>
@@ -130,15 +133,16 @@ export default function AdminDashboard() {
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
           <p className="text-[#aaaaaa]">&copy; 2024 Pixel Roguelike. All rights reserved.</p>
           <nav className="flex space-x-4">
-            <button onClick={() => navigate('/')} className="text-[#aaaaaa] hover:text-[#55ff55]">Home</button>
-            <button onClick={() => navigate('/privacy')} className="text-[#aaaaaa] hover:text-[#55ff55]">Privacy</button>
-            <button onClick={() => navigate('/terms')} className="text-[#aaaaaa] hover:text-[#55ff55]">Terms</button>
-            <button onClick={() => navigate('/support')} className="text-[#aaaaaa] hover:text-[#55ff55]">Support</button>
+            <button onClick={() => navigate('/')} className="text-[#aaaaaa] hover:text-[#55ff55]">Home</button> {/* Navigate to home */}
+            <button onClick={() => navigate('/privacy')} className="text-[#aaaaaa] hover:text-[#55ff55]">Privacy</button> {/* Navigate to privacy policy */}
+            <button onClick={() => navigate('/terms')} className="text-[#aaaaaa] hover:text-[#55ff55]">Terms</button> {/* Navigate to terms of service */}
+            <button onClick={() => navigate('/support')} className="text-[#aaaaaa] hover:text-[#55ff55]">Support</button> {/* Navigate to support */}
           </nav>
           <div className="mt-4 sm:mt-0">
             <div className="flex space-x-4">
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={fb_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={ig_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>  
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={tw_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>  
+              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={fb_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
+              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={ig_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
+              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={tw_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
             </div>
           </div>
         </div>
@@ -147,6 +151,7 @@ export default function AdminDashboard() {
   );
 }
 
+// Chevron down icon for dropdown menu
 function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -155,6 +160,7 @@ function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
+// Menu icon for navigation (not used in this example)
 function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
