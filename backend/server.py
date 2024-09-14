@@ -65,6 +65,28 @@ def login():
         print('Error selecting values:', e)
         return 'An error occurred while selecting values', 500
 
+#login admin
+@app.route('/login-admin', methods=['POST'])
+def login_admin():
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    if not email or not password:
+        return 'All fields are required', 400
+
+    try:
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM loginadmin WHERE email = %s AND password = %s AND admin = TRUE", (email, password))
+        result = cursor.fetchall()
+        cursor.close()
+
+        if len(result) == 0:
+            return 'Invalid email or password', 401
+        else:
+            return 'Login successful'
+    except Error as e:
+        print('Error selecting values:', e)
+        return 'An error occurred while selecting values', 500
 
 # Signup route
 @app.route('/signup', methods=['POST'])
