@@ -15,44 +15,40 @@ const Login: React.FC = () => {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
+const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const validationErrors = Validation(values);
+  setErrors(validationErrors);
 
-    const validationErrors = Validation(values);
-    setErrors(validationErrors);
+  if (Object.keys(validationErrors).length === 0) {
+    const apiUrl = process.env.REACT_APP_API_URL; // URL de la API desde variables de entorno
 
-    if (Object.keys(validationErrors).length === 0) {
-      const apiUrl = process.env.REACT_APP_API_URL; // URL de la API desde variables de entorno
-      console.log('API URL:', apiUrl);  // Verifica que `apiUrl` esté definido correctamente
-      console.log('Enviando valores:', values);
+    // Enviar los datos de login al backend
+    axios.post(`${apiUrl}/login`, values, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        const { betaccess } = response.data; // Obtener el valor de betaccess
 
-      // Enviar los datos de login al backend
-      axios.post(`${apiUrl}/login`, values, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        if (betaccess === 0) {
+          navigate('/userWaitDashboard'); // Redirigir a userWaitDashboard
+          console.log('No tienes acceso a la beta, serás redirigido a la lista de espera');
+        } else if (betaccess === 1) {
+          navigate('/userDashboard'); // Redirigir a userDashboard
+          console.log('Tienes acceso a la beta, serás redirigido a tu dashboard');
+        }
       })
-        .then((response) => {
-          console.log('Respuesta del backend:', response.data);  // Verifica la respuesta del backend
-          const { betaccess } = response.data; // Obtener el valor de betaccess
-
-          if (betaccess === false) {
-            console.log('Redirigiendo a /userWaitDashboard');
-            navigate('/userWaitDashboard'); // Redirigir a userWaitDashboard
-          } else if (betaccess === true) {
-            console.log('Redirigiendo a /userDashboard');
-            navigate('/userDashboard'); // Redirigir a userDashboard
-          }
-        })
-        .catch((err) => {
-          console.log('Error al iniciar sesión:', err.response?.data || err.message);  // Más detalles del error
-          setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
-        });
-    } else {
-      console.log('Validación fallida:', validationErrors);
-    }
-  };
+      .catch((err) => {
+        console.log('Error al iniciar sesión:', err);
+        setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
+      });
+  } else {
+    console.log('Error en la validación');
+  }
+};
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
