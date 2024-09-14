@@ -24,6 +24,8 @@ const Login: React.FC = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       const apiUrl = process.env.REACT_APP_API_URL; // URL de la API desde variables de entorno
+      console.log('API URL:', apiUrl);  // Verifica que `apiUrl` esté definido correctamente
+      console.log('Enviando valores:', values);
 
       // Enviar los datos de login al backend
       axios.post(`${apiUrl}/login`, values, {
@@ -32,22 +34,23 @@ const Login: React.FC = () => {
         },
       })
         .then((response) => {
+          console.log('Respuesta del backend:', response.data);  // Verifica la respuesta del backend
           const { betaccess } = response.data; // Obtener el valor de betaccess
 
           if (betaccess === false) {
+            console.log('Redirigiendo a /userWaitDashboard');
             navigate('/userWaitDashboard'); // Redirigir a userWaitDashboard
-            console.log('No tienes acceso a la beta seras redirigido a la lista de espera');
           } else if (betaccess === true) {
+            console.log('Redirigiendo a /userDashboard');
             navigate('/userDashboard'); // Redirigir a userDashboard
-            console.log('Tienes acceso a la beta seras redirigido a tu dashboard');
           }
         })
         .catch((err) => {
-          console.log('Error al iniciar sesión:', err);
+          console.log('Error al iniciar sesión:', err.response?.data || err.message);  // Más detalles del error
           setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
         });
     } else {
-      console.log('Something went wrong');
+      console.log('Validación fallida:', validationErrors);
     }
   };
 
