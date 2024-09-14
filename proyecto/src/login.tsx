@@ -9,7 +9,7 @@ const Login: React.FC = () => {
     password: '',
   });
 
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
   const navigate = useNavigate();
 
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,9 +47,9 @@ const Login: React.FC = () => {
           setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
         });
     } else {
-      console.log('somthing went wrong');
+      console.log('Something went wrong');
     }
-  }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
@@ -76,7 +76,7 @@ const Login: React.FC = () => {
                 placeholder="Enter your email"
                 onChange={handleInput}
               />
-              {errors.email && <span className="text-danger">{errors.email}</span>}
+              {errors.email && <span className="text-red-500">{errors.email}</span>}
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-[#55ff55]">
@@ -92,7 +92,7 @@ const Login: React.FC = () => {
                 placeholder="Enter your password"
                 onChange={handleInput}
               />
-              {errors.password && <span className="text-danger">{errors.password}</span>}
+              {errors.password && <span className="text-red-500">{errors.password}</span>}
             </div>
             <button
               type="submit"
@@ -100,6 +100,11 @@ const Login: React.FC = () => {
             >
               Sign in
             </button>
+            {errors.general && (
+              <div className="text-center text-red-500 mt-4">
+                {errors.general}
+              </div>
+            )}
           </form>
         </div>
         <div className="text-center text-sm text-[#aaaaaa]">
