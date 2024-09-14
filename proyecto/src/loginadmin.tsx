@@ -18,20 +18,20 @@ const AdminLogin: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const apiUrl = process.env.REACT_APP_API_URL;
-    // Enviar los datos de login al backend
+    // Send login data to the backend
     axios.post(`${apiUrl}/login-admin`, values, {
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then((response) => {
-        // Suponiendo que la respuesta es exitosa
-        console.log('Inicio de sesión exitoso');
-        navigate('/adminDashboard'); // Redirigir a adminDashboard
+        // Assuming the response is successful
+        console.log('Login successful');
+        navigate('/adminDashboard'); // Redirect to adminDashboard
       })
       .catch((err) => {
-        console.log('Error al iniciar sesión:', err);
-        setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
+        console.log('Error logging in:', err);
+        setErrors((prev) => ({ ...prev, general: 'Error logging in. Please try again.' }));
       });
   };
 

@@ -11,28 +11,10 @@ export default function UserDashboard() {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await axios.get(`${apiUrl}/user-profile`); // Ruta para obtener perfil del usuario
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUser();
-  }, [apiUrl]);
-
   const handleSignOut = () => {
-    // Implement sign out logic here (e.g., clear tokens, etc.)
+    // for sign out
     navigate('/');
   };
-
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen text-white">Loading...</div>;
-  }
 
   return (
     <div className="flex flex-col min-h-screen bg-[#1f1f1f]">
@@ -52,14 +34,8 @@ export default function UserDashboard() {
       </header>
       <main className="flex-1 bg-[#1f1f1f] py-16 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto text-center">
-          {user.betaccess === false ? (
-            <>
-              <h2 className="text-3xl font-bold text-[#55ff55] mb-8">Beta Access Not Granted</h2>
-              <p className="text-[#aaaaaa] mb-8">You are currently on the waitlist. Please check back later to see if you have been granted access to the beta.</p>
-            </>
-          ) : (
-            <h2 className="text-3xl font-bold text-[#55ff55] mb-8">Welcome to the Beta!</h2>
-          )}
+            <h2 className="text-3xl font-bold text-[#55ff55] mb-8">Beta Access Not Granted</h2>
+            <p className="text-[#aaaaaa] mb-8">You are currently on the waitlist. Please check back later to see if you have been granted access to the beta.</p>
         </div>
       </main>
       <footer className="bg-[#0f1010] py-6 px-4 sm:px-6 lg:px-8">

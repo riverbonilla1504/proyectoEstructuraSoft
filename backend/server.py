@@ -139,27 +139,6 @@ def accept_user():
         print('Error updating user:', e)
         return 'An error occurred while updating user', 500
 
-# Route to get user profile
-@app.route('/user-profile', methods=['GET'])
-def user_profile():
-    email = request.args.get('email')
-
-    if not email:
-        return jsonify({'error': 'Email is required'}), 400
-
-    try:
-        cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT name, email, betaccess FROM login WHERE email = %s", (email,))
-        result = cursor.fetchone()
-        cursor.close()
-
-        if result is None:
-            return jsonify({'error': 'User not found'}), 404
-        return jsonify(result)
-    except Error as e:
-        print('Error retrieving user profile:', e)
-        return jsonify({'error': 'An error occurred while retrieving the user profile'}), 500
-
 # Start the server
 if __name__ == '__main__':
     app.run(port=PORT)

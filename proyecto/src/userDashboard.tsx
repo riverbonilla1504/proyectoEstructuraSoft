@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// Stack class to manage download URLs
 class Stack<T> {
   private items: T[] = [];
 
@@ -33,28 +34,31 @@ export default function UserDashboard() {
   const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
 
+  // Handle user sign out
   const handleSignOut = () => {
     navigate('/');
   };
 
+  // Handle download request
   const handleDownloadRequest = () => {
     const newStack = new Stack<string>();
-    newStack.push(`${apiUrl}/download`); // Añadir la URL de descarga a la pila
+    newStack.push(`${apiUrl}/download`); // Add the download URL to the stack
     setDownloadStack(newStack);
-    processDownload(newStack); // Procesar la descarga
+    processDownload(newStack); // Process the download
   };
 
+  // Process the download from the stack
   const processDownload = async (stack: Stack<string>) => {
     if (!stack.isEmpty()) {
       setDownloading(true);
-      const downloadUrl = stack.pop(); // Obtener la descarga más reciente (última en entrar)
+      const downloadUrl = stack.pop(); // Get the most recent download (last in)
       if (downloadUrl) {
         try {
-          // Simular una descarga o usar un método para descargar el archivo.
+          // Simulate a download or use a method to download the file.
           window.location.href = downloadUrl;
-          console.log(`Iniciando descarga desde: ${downloadUrl}`);
+          console.log(`Starting download from: ${downloadUrl}`);
         } catch (error) {
-          console.error('Error en la descarga:', error);
+          console.error('Download error:', error);
         } finally {
           setDownloading(false);
         }
@@ -74,9 +78,9 @@ export default function UserDashboard() {
       </header>
       <main className="flex-1 bg-[#1f1f1f] py-16 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold text-[#55ff55] mb-8">¡Felicidades!</h2>
+          <h2 className="text-3xl font-bold text-[#55ff55] mb-8">Congratulations!</h2>
           <p className="text-[#aaaaaa] mb-8">
-            Has sido aceptado a la beta de nuestro juego Pixel Roguelike. ¡Explora mazmorras y combate monstruos!
+            You have been accepted into the beta of our game Pixel Roguelike. Explore dungeons and fight monsters!
           </p>
           <button
             onClick={handleDownloadRequest}

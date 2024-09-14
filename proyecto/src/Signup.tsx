@@ -21,27 +21,27 @@ const Signup: React.FC = () => {
 
   const [errors, setErrors] = useState<Errors>({});
 
-  // Manejo de cambios en los inputs
+  // Handle input changes
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValues(prev => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
-  // Manejo del submit
+  // Handle form submission
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Validar los datos ingresados
+    // Validate input data
     const validationErrors = Validation(values);
     setErrors(validationErrors);
 
-    // Verificar si no hay errores antes de enviar los datos
+    // Check if there are no validation errors before sending data
     if (Object.keys(validationErrors).length === 0) {
-      console.log('Datos enviados:', values);
+      console.log('Data submitted:', values);
 
-      // Utiliza la variable de entorno para la URL de la API
+      // Use environment variable for API URL
       const apiUrl = process.env.REACT_APP_API_URL;
 
-      // Verificar si el usuario ya existe en la base de datos
+      // Check if the user already exists in the database
       axios.post(`${apiUrl}/check-user`, { email: values.email }, {
         headers: {
           'Content-Type': 'application/json'
@@ -49,31 +49,31 @@ const Signup: React.FC = () => {
       })
         .then(res => {
           if (res.data.exists) {
-            // Si el usuario ya existe, mostrar un error
-            setErrors(prev => ({ ...prev, email: 'El email ya está registrado' }));
+            // If the user already exists, show an error
+            setErrors(prev => ({ ...prev, email: 'The email is already registered' }));
           } else {
-            // Si no existe, proceder con el registro
+            // If the user does not exist, proceed with registration
             axios.post(`${apiUrl}/signup`, values, {
               headers: {
                 'Content-Type': 'application/json'
               }
             })
               .then(res => {
-                console.log('Datos enviados:', res.data);
-                navigate('/login'); // Redirige al inicio u otra página después del registro exitoso
+                console.log('Data submitted:', res.data);
+                navigate('/login'); // Redirect to login or another page after successful registration
               })
               .catch(err => {
-                console.log('Error al enviar datos:', err);
-                setErrors(prev => ({ ...prev, general: 'Error al registrar. Inténtalo de nuevo.' }));
+                console.log('Error submitting data:', err);
+                setErrors(prev => ({ ...prev, general: 'Error registering. Please try again.' }));
               });
           }
         })
         .catch(err => {
-          console.log('Error al verificar el email:', err);
-          setErrors(prev => ({ ...prev, general: 'Error al verificar el email. Inténtalo de nuevo.' }));
+          console.log('Error checking email:', err);
+          setErrors(prev => ({ ...prev, general: 'Error checking email. Please try again.' }));
         });
     } else {
-      console.log('Errores de validación presentes:', validationErrors);
+      console.log('Validation errors present:', validationErrors);
     }
   };
 
@@ -82,15 +82,15 @@ const Signup: React.FC = () => {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-[#55ff55]"onClick={() => navigate('/')}>Pixel Roguelike</h1>
-          <p className="mt-2 text-sm text-[#aaaaaa]">
-            Regístrate en tu cuenta
-          </p>
+            <p className="mt-2 text-sm text-[#aaaaaa]">
+            Sign up for your account
+            </p>
         </div>
         <div className="bg-[#1a1b1c] p-8 rounded-lg shadow-md">
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-[#55ff55]">
-                Nombre
+                Name
               </label>
               <input
                 id="name"
@@ -98,7 +98,7 @@ const Signup: React.FC = () => {
                 type="text"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-[#55ff55] placeholder-[#aaaaaa] text-[#000000] focus:outline-none focus:ring-[#ff9955] focus:border-[#ff9955] focus:z-10 sm:text-sm"
-                placeholder="Introduce tu nombre"
+                placeholder="Enter your name"
                 onChange={handleInput}
               />
               {errors.name && <span className='text-danger'>{errors.name}</span>}
@@ -113,14 +113,14 @@ const Signup: React.FC = () => {
                 type="email"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-[#55ff55] placeholder-[#aaaaaa] text-[#000000] focus:outline-none focus:ring-[#ff9955] focus:border-[#ff9955] focus:z-10 sm:text-sm"
-                placeholder="Introduce tu email"
+                placeholder="Enter your email"
                 onChange={handleInput}
               />
               {errors.email && <span className='text-danger'>{errors.email}</span>}
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-[#55ff55]">
-                Contraseña
+                Password
               </label>
               <input
                 id="password"
@@ -128,7 +128,7 @@ const Signup: React.FC = () => {
                 type="password"
                 required
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-[#55ff55] placeholder-[#aaaaaa] text-[#000000] focus:outline-none focus:ring-[#ff9955] focus:border-[#ff9955] focus:z-10 sm:text-sm"
-                placeholder="Introduce tu contraseña"
+                placeholder="Enter your password"
                 onChange={handleInput}
               />
               {errors.password && <span className='text-danger'>{errors.password}</span>}
@@ -138,14 +138,14 @@ const Signup: React.FC = () => {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-[#ffffff] bg-[#55ff55] hover:bg-[#44dd44] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff9955]"
             >
-              Registrarse
+              Sign up
             </button>
           </form>
         </div>
         <div className="text-center text-sm text-[#aaaaaa]">
-          ¿Ya tienes una cuenta?{' '}
+          Already have an account?{' '}
           <Link to="/login" className="font-medium text-[#55ff55] hover:text-[#ff9955]">
-            Inicia sesión
+            Log in
           </Link>
         </div>
       </div>
