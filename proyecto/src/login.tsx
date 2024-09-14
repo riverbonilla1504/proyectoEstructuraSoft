@@ -36,8 +36,10 @@ const Login: React.FC = () => {
 
           if (betaccess === false) {
             navigate('/userWaitDashboard'); // Redirigir a userWaitDashboard
+            console.log('No tienes acceso a la beta seras redirigido a la lista de espera');
           } else if (betaccess === true) {
             navigate('/userDashboard'); // Redirigir a userDashboard
+            console.log('Tienes acceso a la beta seras redirigido a tu dashboard');
           }
         })
         .catch((err) => {
