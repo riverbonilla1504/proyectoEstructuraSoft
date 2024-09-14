@@ -63,10 +63,6 @@ export default function UserDashboard() {
     }
   };
 
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen text-white">Loading...</div>;
-  }
-
   return (
     <div className="flex flex-col min-h-screen bg-[#1f1f1f]">
       <header className="bg-[#0f1010] py-6 px-4 sm:px-6 lg:px-8">
