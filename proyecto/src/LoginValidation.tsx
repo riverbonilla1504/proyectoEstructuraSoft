@@ -3,25 +3,21 @@ function Validation(values: any) {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
 
-  if (values.email === '') {
-    errors.email = 'Email should not be empty';
-  }
-  else if (!emailRegex.test(values.email)) {
-    errors.email = 'email did not match';
-  }
-  else {
-    errors.email = '';
+  // Validación del email
+  if (!values.email) {
+    errors.email = 'El email no puede estar vacío';
+  } else if (!emailRegex.test(values.email)) {
+    errors.email = 'El formato del email es incorrecto';
   }
 
-  if (values.password === '') {
-    errors.password = 'Password should not be empty';
+  // Validación de la contraseña
+  if (!values.password) {
+    errors.password = 'La contraseña no puede estar vacía';
+  } else if (!passwordRegex.test(values.password)) {
+    errors.password = 'La contraseña debe tener al menos un dígito, una letra minúscula, una mayúscula y entre 6 y 20 caracteres';
   }
-  else if (!passwordRegex.test(values.password)) {
-    errors.password = 'Password should contain at least one digit, one lowercase and one uppercase letter, and at least 6 characters';
-  }
-  else {
-    errors.password = '';
-  }
+
   return errors;
 }
+
 export default Validation;

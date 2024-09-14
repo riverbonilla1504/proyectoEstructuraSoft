@@ -44,8 +44,10 @@ const Login: React.FC = () => {
           console.log('Error al iniciar sesión:', err);
           setErrors((prev) => ({ ...prev, general: 'Error al iniciar sesión. Inténtalo de nuevo.' }));
         });
+    } else {
+      console.log('somthing went wrong');
     }
-  };
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-[#0f1010]">
