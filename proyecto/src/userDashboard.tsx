@@ -1,39 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import fb_svg from './assets/fb.svg';
-import ig_svg from './assets/ig.svg';
-import tw_svg from './assets/tw.svg';
+
+class Stack<T> {
+  private items: T[] = [];
+
+  push(item: T) {
+    this.items.push(item);
+  }
+
+  pop(): T | undefined {
+    return this.items.pop();
+  }
+
+  peek(): T | undefined {
+    return this.items[this.items.length - 1];
+  }
+
+  isEmpty(): boolean {
+    return this.items.length === 0;
+  }
+
+  getAll(): T[] {
+    return [...this.items];
+  }
+}
 
 export default function UserDashboard() {
+  const [downloadStack, setDownloadStack] = useState<Stack<string>>(new Stack<string>());
   const [user, setUser] = useState<{ name?: string; email?: string; betaccess?: boolean }>({});
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [downloading, setDownloading] = useState(false);
   const apiUrl = process.env.REACT_APP_API_URL;
-
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const response = await axios.get(`${apiUrl}/user-profile`); // Ruta para obtener perfil del usuario
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user profile:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchUser();
-  }, [apiUrl]);
+  const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // Implement sign out logic here (e.g., clear tokens, etc.)
     navigate('/');
   };
 
-  const handleDownload = () => {
-    // Implement the download logic here
-    // This could be redirecting to a download URL or triggering a file download
-    window.location.href = `${apiUrl}/download`; // Ruta para descargar el juego
+  const handleDownloadRequest = () => {
+    const newStack = new Stack<string>();
+    newStack.push(`${apiUrl}/download`); // Añadir la URL de descarga a la pila
+    setDownloadStack(newStack);
+    processDownload(newStack); // Procesar la descarga
+  };
+
+  const processDownload = async (stack: Stack<string>) => {
+    if (!stack.isEmpty()) {
+      setDownloading(true);
+      const downloadUrl = stack.pop(); // Obtener la descarga más reciente (última en entrar)
+      if (downloadUrl) {
+        try {
+          // Simular una descarga o usar un método para descargar el archivo.
+          window.location.href = downloadUrl;
+          console.log(`Iniciando descarga desde: ${downloadUrl}`);
+        } catch (error) {
+          console.error('Error en la descarga:', error);
+        } finally {
+          setDownloading(false);
+        }
+      }
+    }
   };
 
   if (loading) {
@@ -45,34 +72,29 @@ export default function UserDashboard() {
       <header className="bg-[#0f1010] py-6 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto flex items-center justify-between">
           <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1>
-          <nav className="hidden md:flex space-x-4">
-            <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">About</a>
-            <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">Contact</a>
-            <div className="relative">
-              <button onClick={handleSignOut} className="text-[#aaaaaa] hover:text-[#55ff55] flex items-center">
-                Sign out
-              </button>
-            </div>
-          </nav>
+          <button onClick={handleSignOut} className="text-[#aaaaaa] hover:text-[#55ff55]">
+            Sign out
+          </button>
         </div>
       </header>
       <main className="flex-1 bg-[#1f1f1f] py-16 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto text-center">
-          {user.betaccess === false ? (
+          {user.betaccess ? (
             <>
-              <h2 className="text-3xl font-bold text-[#55ff55] mb-8">Beta Access Not Granted</h2>
-              <p className="text-[#aaaaaa] mb-8">You are currently on the waitlist. Please check back later to see if you have been granted access to the beta.</p>
+              <h2 className="text-3xl font-bold text-[#55ff55] mb-8">¡Felicidades!</h2>
+              <p className="text-[#aaaaaa] mb-8">Has sido aceptado a la beta de nuestro juego Pixel Roguelike. ¡Explora mazmorras y combate monstruos!</p>
+              <button
+                onClick={handleDownloadRequest}
+                className={`px-6 py-3 rounded-md bg-[#55ff55] text-[#1f1f1f] font-bold transition-colors duration-300 ${downloading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#44dd44]'}`}
+                disabled={downloading}
+              >
+                {downloading ? 'Downloading...' : 'Download Game'}
+              </button>
             </>
           ) : (
             <>
-              <h2 className="text-3xl font-bold text-[#55ff55] mb-8">Congratulations!</h2>
-              <p className="text-[#aaaaaa] mb-8">You have been granted access to the beta of our exciting 16-bit style roguelike game. Explore the dungeons, battle monsters, and uncover hidden secrets!</p>
-              <button
-                onClick={handleDownload}
-                className="px-6 py-3 rounded-md bg-[#55ff55] text-[#1f1f1f] font-bold hover:bg-[#44dd44] transition-colors duration-300"
-              >
-                Download Game
-              </button>
+              <h2 className="text-3xl font-bold text-[#55ff55] mb-8">Beta Access Not Granted</h2>
+              <p className="text-[#aaaaaa] mb-8">You are currently on the waitlist. Please check back later to see if you have been granted access to the beta.</p>
             </>
           )}
         </div>
@@ -86,13 +108,6 @@ export default function UserDashboard() {
             <button onClick={() => navigate('/terms')} className="text-[#aaaaaa] hover:text-[#55ff55]">Terms</button>
             <button onClick={() => navigate('/support')} className="text-[#aaaaaa] hover:text-[#55ff55]">Support</button>
           </nav>
-          <div className="mt-4 sm:mt-0">
-            <div className="flex space-x-4">
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={fb_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={ig_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={tw_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
-            </div>
-          </div>
         </div>
       </footer>
     </div>
