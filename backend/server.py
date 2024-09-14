@@ -49,21 +49,22 @@ def login():
     password = request.json.get('password')
 
     if not email or not password:
-        return 'All fields are required', 400
+        return {'error': 'All fields are required'}, 400
 
     try:
         cursor = connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM login WHERE email = %s AND password = %s", (email, password))
-        result = cursor.fetchall()
+        cursor.execute("SELECT email, password, betaccess FROM login WHERE email = %s AND password = %s", (email, password))
+        result = cursor.fetchone()
         cursor.close()
 
-        if len(result) == 0:
-            return 'Invalid email or password', 401
+        if result is None:
+            return {'error': 'Invalid email or password'}, 401
         else:
-            return 'Login successful'
+            # Devolver los datos del usuario y el valor de `betaccess`
+            return {'message': 'Login successful', 'betaccess': result['betaccess']}, 200
     except Error as e:
         print('Error selecting values:', e)
-        return 'An error occurred while selecting values', 500
+        return {'error': 'An error occurred while selecting values'}, 500
 
 #login admin
 @app.route('/login-admin', methods=['POST'])
