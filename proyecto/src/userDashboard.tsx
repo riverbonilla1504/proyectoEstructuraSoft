@@ -31,7 +31,7 @@ export default function UserDashboard() {
   const [downloadStack, setDownloadStack] = useState<Stack<string>>(new Stack<string>());
   const [user, setUser] = useState<{ name?: string; email?: string }>({});
   const [downloading, setDownloading] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001'; // API URL
   const navigate = useNavigate();
 
   // Handle user sign out

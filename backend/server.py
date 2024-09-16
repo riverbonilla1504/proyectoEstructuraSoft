@@ -6,7 +6,7 @@ from flask_cors import CORS
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing
-PORT = 3000  # Define the port on which the server will run
+PORT = 3001  # Define the port on which the server will run
 
 # Database connection configuration
 try:

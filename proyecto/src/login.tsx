@@ -25,7 +25,7 @@ const Login: React.FC = () => {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      const apiUrl = process.env.REACT_APP_API_URL; // API URL from environment variables
+      const apiUrl = process.env.REACT_APP_API_URL|| 'http://localhost:3001'; // API URL
 
       // Send login data to the backend
       axios.post(`${apiUrl}/login`, values, {

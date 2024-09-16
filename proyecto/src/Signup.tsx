@@ -39,7 +39,7 @@ const Signup: React.FC = () => {
       console.log('Data submitted:', values);
 
       // Use environment variable for API URL
-      const apiUrl = process.env.REACT_APP_API_URL;
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001'; // API URL
 
       // Check if the user already exists in the database
       axios.post(`${apiUrl}/check-user`, { email: values.email }, {

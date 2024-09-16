@@ -17,7 +17,7 @@ const AdminLogin: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001'; // API URL
     // Send login data to the backend
     axios.post(`${apiUrl}/login-admin`, values, {
       headers: {

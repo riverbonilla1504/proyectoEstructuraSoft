@@ -6,10 +6,7 @@ import ig_svg from './assets/ig.svg';
 import tw_svg from './assets/tw.svg';
 
 export default function UserDashboard() {
-  const [user, setUser] = useState<{ name?: string; email?: string; betaccess?: boolean }>({});
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSignOut = () => {
     // for sign out

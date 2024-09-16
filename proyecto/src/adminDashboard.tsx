@@ -39,7 +39,7 @@ export default function AdminDashboard() {
 
   const [usersQueue, setUsersQueue] = useState<Queue<User>>(new Queue<User>());
   const [menuOpen, setMenuOpen] = useState(false); // Dropdown menu for session
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3001'; // API URL
   const navigate = useNavigate(); // Initialize navigation hook
 
   // Fetch users when component mounts or apiUrl changes
