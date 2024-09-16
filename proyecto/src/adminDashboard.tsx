@@ -84,8 +84,6 @@ export default function AdminDashboard() {
         <div className="container mx-auto flex items-center justify-between">
           <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1> {/* Navigate to home page */}
           <nav className="hidden md:flex space-x-4">
-            <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">About</a>
-            <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">Contact</a>
             <div className="relative">
               <button onClick={() => setMenuOpen(!menuOpen)} className="text-[#aaaaaa] hover:text-[#55ff55] flex items-center">
                 Session
@@ -133,10 +131,6 @@ export default function AdminDashboard() {
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
           <p className="text-[#aaaaaa]">&copy; 2024 Pixel Roguelike. All rights reserved.</p>
           <nav className="flex space-x-4">
-            <button onClick={() => navigate('/')} className="text-[#aaaaaa] hover:text-[#55ff55]">Home</button> {/* Navigate to home */}
-            <button onClick={() => navigate('/privacy')} className="text-[#aaaaaa] hover:text-[#55ff55]">Privacy</button> {/* Navigate to privacy policy */}
-            <button onClick={() => navigate('/terms')} className="text-[#aaaaaa] hover:text-[#55ff55]">Terms</button> {/* Navigate to terms of service */}
-            <button onClick={() => navigate('/support')} className="text-[#aaaaaa] hover:text-[#55ff55]">Support</button> {/* Navigate to support */}
           </nav>
           <div className="mt-4 sm:mt-0">
             <div className="flex space-x-4">
@@ -156,28 +150,6 @@ function ChevronDownIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-// Menu icon for navigation (not used in this example)
-function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
     </svg>
   );
 }
