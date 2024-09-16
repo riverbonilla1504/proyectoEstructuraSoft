@@ -15,21 +15,6 @@ const Home: React.FC = () => {
           <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1> {/* Navigate to home page */}
           <nav className="hidden md:flex space-x-4">
             <button 
-              onClick={() => navigate('/about')} // Navigate to 'About' page
-              className="no-underline text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
-              About
-            </button>
-            <button 
-              onClick={() => navigate('/features')} // Navigate to 'Features' page
-              className="no-underline text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
-              Features
-            </button>
-            <button 
-              onClick={() => navigate('/contact')} // Navigate to 'Contact' page
-              className="no-underline text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
-              Contact
-            </button>
-            <button 
               onClick={() => navigate('/login')} // Navigate to 'Login' page
               className="no-underline text-[#aaaaaa] hover:text-[#55ff55] border rounded-[10px] px-4 py-2">
               Login

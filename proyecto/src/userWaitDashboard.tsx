@@ -19,8 +19,6 @@ export default function UserDashboard() {
         <div className="container mx-auto flex items-center justify-between">
           <h1 className="text-4xl font-bold text-[#55ff55]" onClick={() => navigate('/')}>Pixel Roguelike</h1>
           <nav className="hidden md:flex space-x-4">
-            <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">About</a>
-            <a href="#" className="no-underline text-[#aaaaaa] hover:text-[#55ff55]">Contact</a>
             <div className="relative">
               <button onClick={handleSignOut} className="text-[#aaaaaa] hover:text-[#55ff55] flex items-center">
                 Sign out
@@ -39,16 +37,9 @@ export default function UserDashboard() {
         <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center">
           <p className="text-[#aaaaaa]">&copy; 2024 Pixel Roguelike. All rights reserved.</p>
           <nav className="flex space-x-4">
-            <button onClick={() => navigate('/')} className="text-[#aaaaaa] hover:text-[#55ff55]">Home</button>
-            <button onClick={() => navigate('/privacy')} className="text-[#aaaaaa] hover:text-[#55ff55]">Privacy</button>
-            <button onClick={() => navigate('/terms')} className="text-[#aaaaaa] hover:text-[#55ff55]">Terms</button>
-            <button onClick={() => navigate('/support')} className="text-[#aaaaaa] hover:text-[#55ff55]">Support</button>
           </nav>
           <div className="mt-4 sm:mt-0">
             <div className="flex space-x-4">
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={fb_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={ig_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
-              <a href="/" className="text-[#aaaaaa] hover:text-[#55ff55]"><img src={tw_svg} alt="" style={{ width: '20px', height: '20px' }} /></a>
             </div>
           </div>
         </div>
